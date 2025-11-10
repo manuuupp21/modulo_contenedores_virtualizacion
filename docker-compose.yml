@@ -1,0 +1,22 @@
+services:
+  adoptapi:
+    build:
+      context: ./AdoptAPI
+      dockerfile: Dockerfile
+    container_name: adoptapi
+    ports:
+      - "8080:8080"
+    volumes:
+      # Monta el código fuente para desarrollo en vivo
+      - .:/AdoptAPI/
+      # Monta un volumen persistente para el archivo SQLite
+      - adoptapi_data:/AdoptAPI/data
+    environment:
+      # Variable de entorno opcional: ruta de la BD
+      DATABASE_URL: "sqlite:///./data/AdoptAPI.db"
+    command: >
+      uvicorn AdoptAPI.main:app --host 0.0.0.0 --port 8080 --reload
+    restart: always
+
+volumes:
+  adoptapi_data:
